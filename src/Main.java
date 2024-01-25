@@ -4,13 +4,14 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
+        Exception err = new Exception();
         Scanner scanner = new Scanner(System.in);
         System.out.println("Введите выражение: ");
         String expression = scanner.nextLine();
         try {
-            String[] str = expression.split("");
+            String[] str = expression.split(" ");
             if (str.length != 3) {
-                throw new IllegalArgumentException("Введено неверное выражение");
+                System.out.println(err.getMessage());
             }
             int a, b;
             boolean isRoman;
@@ -19,7 +20,7 @@ public class Main {
                 b = Integer.parseInt(str[2]);
                 isRoman = false;
 
-            } catch (NumberFormatException e) {
+            } catch (Exception e) {
                 a = convertRomanToArabic(str[0]);
                 b = convertRomanToArabic(str[2]);
                 isRoman = true;
@@ -27,14 +28,14 @@ public class Main {
 
             char op = str[1].charAt(0);
             if (op != '+' && op != '-' && op != '*' && op != '/') {
-                throw new IllegalArgumentException("Введен неверный оператор");
+                System.out.println(err.getMessage());
             }
 
             int result = arithmeticOperation(a, op, b);
 
             if (isRoman) {
                 if (result <= 0) {
-                    throw new IllegalArgumentException("Римские числа не могут быть меньше или равны нулю");
+                    System.out.println(err.getMessage());
                 }
                 String romanResult = convertArabicToRoman(result);
                 System.out.println(calc(romanResult));
@@ -42,7 +43,7 @@ public class Main {
                 System.out.println(calc(String.valueOf(result)));
             }
         } catch (Exception e) {
-            System.out.println("Ошибка: используются одновременно разные системы счисления.\n" + e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 
@@ -72,7 +73,7 @@ public class Main {
 
     }
 
-
+//
     private static String convertArabicToRoman(int arabic) {
         StringBuilder roman = new StringBuilder();
         while (arabic >= 1000) {
