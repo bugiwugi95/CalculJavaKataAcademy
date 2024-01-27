@@ -3,22 +3,23 @@ import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) {
-        Exception err = new Exception();
+    public static void main(String[] args) throws Exception {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Введите выражение: ");
         String expression = scanner.nextLine();
-        try {
+
             String[] str = expression.split(" ");
             if (str.length != 3) {
-                System.out.println(err.getMessage());
+                throw new Exception();
             }
-            int a, b;
-            boolean isRoman;
+
+            int a, b ;
+            boolean isRoman ;
             try {
                 a = Integer.parseInt(str[0]);
                 b = Integer.parseInt(str[2]);
                 isRoman = false;
+
 
             } catch (Exception e) {
                 a = convertRomanToArabic(str[0]);
@@ -28,24 +29,26 @@ public class Main {
 
             char op = str[1].charAt(0);
             if (op != '+' && op != '-' && op != '*' && op != '/') {
-                System.out.println(err.getMessage());
+                throw new Exception();
             }
 
             int result = arithmeticOperation(a, op, b);
 
             if (isRoman) {
                 if (result <= 0) {
-                    System.out.println(err.getMessage());
+                    throw new Exception();
                 }
                 String romanResult = convertArabicToRoman(result);
                 System.out.println(calc(romanResult));
             } else {
                 System.out.println(calc(String.valueOf(result)));
             }
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
         }
-    }
+
+
+    //
+    //
+
 
     public static int convertRomanToArabic(String romanNumber) {
         Map<Character, Integer> map = new HashMap<>();
@@ -73,7 +76,7 @@ public class Main {
 
     }
 
-//
+
     private static String convertArabicToRoman(int arabic) {
         StringBuilder roman = new StringBuilder();
         while (arabic >= 1000) {
@@ -140,7 +143,13 @@ public class Main {
             case '*' -> result = a * b;
             case '/' -> result = a / b;
         }
-
+        if (a < 0 || a > 10 && b < 10){
+            System.out.println("A Допустимые числа для ввода: от 1 до 10");
+            result = 0;
+        } else if (b < 0 || b > 10 && a < 10) {
+            System.out.println("B Допустимые числа для ввода: от 1 до 10");
+            result = 0;
+        }
 
         return result;
     }
